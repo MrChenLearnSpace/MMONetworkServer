@@ -12,7 +12,7 @@ namespace MMONetworkServer {
             DataMgr dataMgr = DataMgr.GetInstance();
             ServNet servNet = new ServNet();
            
-            servNet.Start("127.0.0.1", 1245);
+            servNet.Start("127.0.0.1", 7777);
             Console.WriteLine(servNet.GetLocalIp());
             while(true) {
                 string str = Console.ReadLine();

@@ -20,13 +20,13 @@ namespace MMONetworkServer.Core {
         public static CodeLoader GetInstance() {
             return instance;
         }
-        public void Reload() {
+        public void Reload( string HotfixPath = @"F:\project\VSProject\ClassLibrary1\bin\Debug\netcoreapp3.1\ClassLibrary1") {
             hotfixInstance.Clear();
             assemblyLoadContext?.Unload();
             GC.Collect();
             assemblyLoadContext = new AssemblyLoadContext("ClassLibrary1", true);
-            byte[] dllBytes = File.ReadAllBytes(@"F:\project\VSProject\ClassLibrary1\bin\Debug\netcoreapp3.1\ClassLibrary1.dll");//加载dll
-            byte[] pdbBytes = File.ReadAllBytes(@"F:\project\VSProject\ClassLibrary1\bin\Debug\netcoreapp3.1\ClassLibrary1.pdb");//加载pdb
+            byte[] dllBytes = File.ReadAllBytes(HotfixPath + ".dll");//加载dll
+            byte[] pdbBytes = File.ReadAllBytes(HotfixPath + ".pdb");//加载pdb
             hotfix = assemblyLoadContext.LoadFromStream(new MemoryStream(dllBytes), new MemoryStream(pdbBytes));
             //object obj = hotfix.CreateInstance("ClassLibrary1.Class1");
             //MethodInfo mm = obj.GetType().GetMethod("add");
@@ -41,9 +41,14 @@ namespace MMONetworkServer.Core {
         public object Find(string className) {
             return hotfixInstance[className];
         }
-        public void FindFunRun(string className,string funName,object[] objs) {
+        public void FindFunRun(string className, string funName, object[] objs) {
+
             MethodInfo mm = Find(className).GetType().GetMethod(funName);
-            mm.Invoke(Find(className), objs);
+            if (mm != null)
+                mm.Invoke(Find(className), objs);
+            else
+                Console.WriteLine("className: " + className + " funName: " + funName  +"没找到");
+
         }
 
     }

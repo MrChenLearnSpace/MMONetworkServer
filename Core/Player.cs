@@ -43,7 +43,7 @@ namespace MMONetworkServer.Core {
         public bool Logout() {
             //ServNet.instance.handlePlayerEvent.OnLogout(this);
            
-            CodeLoader.GetInstance().FindFunRun("MMONetworkServer.Logic.HandleConnMsg", "OnLogout", new object[] { this });
+            CodeLoader.GetInstance().FindFunRun("MMONetworkServer.Logic.HandlePlayerEvent", "OnLogout", new object[] { this });
             if (!DataMgr.instance.SavePlayer(this))
                 return false;
             conn.player = null;

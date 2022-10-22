@@ -5,9 +5,12 @@ using System.Text;
 namespace MMONetworkServer {
     [Serializable]
     public class PlayerData {
-        public int score = 0;
+        public float hp = 1;
+        public float atk = 0;//attack
+        public float dft = 0;//defend
+        public float attRange = 1;
         public PlayerData() {
-            score = 100;
+            atk = 100;
         }
     }
 }

@@ -32,7 +32,7 @@ namespace MMONetworkServer.net {
 
         public bool isShowTime;
         //心跳时间
-        public long heartBeatTime = 80000;
+        public long heartBeatTime = 800;
         /*
                 //消息分发
                 public HandleConnMsg handleConnMsg = new HandleConnMsg();
@@ -102,10 +102,13 @@ namespace MMONetworkServer.net {
         }
         private  void ReciveCb(IAsyncResult ar) {
             Conn conn = (Conn)ar.AsyncState;//这个AsyncState就是上面那个BeginRecive函数里面最后一个参数
+            if (!conn.isUse)
+                return;
             lock (conn) {
                 try {
                     int count = conn.socket.EndReceive(ar);//返回接收的字节数
                                                            //没有信息就关闭
+                    
                     if (count <= 0) {
                         Console.WriteLine("收到[" + conn.GetAdress() + "] 断开连接");
                         conn.Close();
@@ -256,7 +259,7 @@ namespace MMONetworkServer.net {
         }
         public void Close() {
             ProtocolBytes prore = new ProtocolBytes();
-            prore.AddString("Logout");
+            prore.AddString("Kick");
             
 
             //全部下线
