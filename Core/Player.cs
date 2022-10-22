@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Reflection;
 //using MMONetworkServer.Logic;
+using MMONetworkServer.net;
 namespace MMONetworkServer.Core {
    // 游戏中的角色，功能包括:给角色发消息、踢下线、保存角色数据等
     public class Player {
@@ -18,7 +19,8 @@ namespace MMONetworkServer.Core {
         public void Send(ProtocolBase protocol) {
             if (conn == null)
                 return;
-            ServNet.instance.Send(conn, protocol);
+            conn.Send(protocol);
+            //ServNet.instance.Send(conn, protocol);
         }
         public static bool KickOff(string id , ProtocolBase proto) {
             Conn[] conns = ServNet.instance.conns;

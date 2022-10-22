@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using MMONetworkServer.Core;
 //using MMONetworkServer.Logic;
-
+using MMONetworkServer.net;
 namespace MMONetworkServer {
     public class MainClass{
         static void Main(string[] args) {

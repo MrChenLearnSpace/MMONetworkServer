@@ -9,9 +9,9 @@ using System.Net.Sockets;
 using System.Linq;
 using System.Data;
 using System.Reflection;
-
+using MMONetworkServer.Core;
 //using MMONetworkServer.Logic;
-namespace MMONetworkServer.Core {
+namespace MMONetworkServer.net {
     //网络底层 ，使用异步 TCP处理客户端连接，读取客户端消息后分发给HandleConnMsg和HandlePlayerMsg 处理
     public class ServNet {
         public Socket listenfd;
@@ -32,7 +32,7 @@ namespace MMONetworkServer.Core {
 
         public bool isShowTime;
         //心跳时间
-        public long heartBeatTime = 180;
+        public long heartBeatTime = 80000;
         /*
                 //消息分发
                 public HandleConnMsg handleConnMsg = new HandleConnMsg();
@@ -92,7 +92,7 @@ namespace MMONetworkServer.Core {
                     conn.Init(socket);
                     string host = conn.GetAdress();
                     Console.WriteLine("客户端连接:[" + host + "] conn池ID:" + index);
-                    conn.socket.BeginReceive(conn.readBuff, conn.buffCount, conn.BuffRemain(), SocketFlags.None, ReciveCb, conn);//接收的同时调用ReciveCb回调函数
+                    conn.socket.BeginReceive(conn.readBuff.bytes, conn.readBuff.writeIdx, conn.BuffRemain(), SocketFlags.None, ReciveCb, conn);//接收的同时调用ReciveCb回调函数
                 }
                 listenfd.BeginAccept(AcceptCb, null);//再次调用AcceprCb回调函数
             }
@@ -111,11 +111,14 @@ namespace MMONetworkServer.Core {
                         conn.Close();
                         return;
                     }
-                    conn.buffCount += count;
+                    conn.readBuff.writeIdx += count;
                     ProcessData(conn);
-                    
+                    if (conn.BuffRemain() < 8) {
+                        conn.readBuff.MoveBytes();
+                        conn.readBuff.ReSize(conn.readBuff.length * 2);
+                    }
                     //继续接收
-                    conn.socket.BeginReceive(conn.readBuff, conn.buffCount, conn.BuffRemain(), SocketFlags.None, ReciveCb, conn);
+                    conn.socket.BeginReceive(conn.readBuff.bytes, conn.readBuff.writeIdx, conn.BuffRemain(), SocketFlags.None, ReciveCb, conn);
                 }
                 catch (Exception e) {
                     Console.WriteLine("Recive失败" + e.Message);
@@ -124,17 +127,19 @@ namespace MMONetworkServer.Core {
         }
 
         private void ProcessData(Conn conn) {
-            if (conn.buffCount < sizeof(Int32)) {
+            if (conn.readBuff.length < sizeof(Int32)) {
                 return;
             }
-            Console.WriteLine("接收到了 " + conn.buffCount + " 个字节");
-            Array.Copy(conn.readBuff, conn.lenBytes, sizeof(Int32));
+           // Console.WriteLine("接收到了 " + conn.readBuff.length + " 个字节") ;
+            Array.Copy(conn.readBuff.bytes, conn.lenBytes, sizeof(Int32));
             conn.msgLength = BitConverter.ToInt32(conn.lenBytes, 0);
+
             //小于最小要求长度则返回表示未接收完全
-            if (conn.buffCount < conn.msgLength + sizeof(Int32)) {
+            if (conn.readBuff.length < conn.msgLength + sizeof(Int32)) {
                 return;
             }
-            ProtocolBase protocol = proto.Decode(conn.readBuff, sizeof(Int32), conn.msgLength);
+            ProtocolBase protocol = proto.Decode(conn.readBuff.bytes, sizeof(Int32), conn.msgLength);
+            Console.WriteLine("Name: "+protocol.GetName()+ "GetDesc: " + protocol.GetDesc());
             HandleMsg(conn, protocol);
 
 
@@ -153,16 +158,20 @@ namespace MMONetworkServer.Core {
 */
 
             //清除已处理的消息
-            int count = conn.buffCount - conn.msgLength - sizeof(Int32);
-            Array.Copy(conn.readBuff, sizeof(Int32) + conn.msgLength, conn.readBuff, 0, count);
-            conn.buffCount = count;
+            //int count = conn.buffCount - conn.msgLength - sizeof(Int32);
+            //Array.Copy(conn.readBuff, sizeof(Int32) + conn.msgLength, conn.readBuff, 0, count);
+            //conn.buffCount = count;
+            int count = sizeof(Int32) + conn.msgLength;
+            conn.readBuff.readIdx += count;
+            conn.readBuff.CheckAndMoveBytes();
             //如果还有多余信息就继续处理
-            if (conn.buffCount > 0) {
+            if (conn.readBuff.length > 4) {
                 ProcessData(conn);
             }
         }
 
         private void HandleMsg(Conn conn, ProtocolBase protoBase) {
+            
             string name = protoBase.GetName();
             string methodName = "Msg" + name;
             //连接协议分发
@@ -212,17 +221,13 @@ namespace MMONetworkServer.Core {
                 }
             }
         }
-        public void Send(Conn conn,ProtocolBase protocol) {
-            byte[] bytes = protocol.Encode();
-            byte[] length = BitConverter.GetBytes(bytes.Length);
-            byte[] sendbuff = length.Concat(bytes).ToArray();
-            conn.socket.Send(sendbuff);
-        }
+
         public void Boradcast(ProtocolBase protocol) {
             for (int i = 0; i < conns.Length; i++) {
                 if (!conns[i].isUse) continue;
                 if (conns[i].player == null) continue;
-                Send(conns[i], protocol);
+                // Send(conns[i], protocol);
+                conns[i].Send(protocol);
             }
         }
         public string GetLocalIp() {
