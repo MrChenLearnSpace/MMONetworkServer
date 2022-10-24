@@ -31,7 +31,7 @@ namespace MMONetworkServer.Core {
         }
         public void Connect() {
             string connStr = "Database=game;Data Source=127.0.0.1;";
-            connStr += "User Id=root;Password=tankwar;port=3306";
+            connStr += "User Id=root;Password=xxxx;port=xxxx";
             sqlConn = new MySqlConnection(connStr);
             try {
                 sqlConn.Open();
