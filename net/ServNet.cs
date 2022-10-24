@@ -198,7 +198,7 @@ namespace MMONetworkServer.net {
                     return;
                 }
                 Object[] obj = new object[] { conn.player, protoBase };
-                Console.WriteLine("[处理玩家消息]" + conn.player.id + " :" + name);
+                Console.WriteLine("[处理玩家消息]" + conn.player.GetId() + " :" + name);
                 mm.Invoke(CodeLoader.GetInstance().Find("MMONetworkServer.Logic.HandlePlayerMsg"), obj);
             }
         }
@@ -253,7 +253,7 @@ namespace MMONetworkServer.net {
 
                 string str = "连接 [" + conns[i].GetAdress() + "]";
                 if (conns[i].player != null)
-                    str += "玩家id " + conns[i].player.id;
+                    str += "玩家id " + conns[i].player.GetId();
                 Console.WriteLine(str);
             }
         }

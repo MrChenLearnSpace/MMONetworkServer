@@ -9,4 +9,10 @@
     <PackageReference Include="MySql.Data" Version="8.0.31" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="System.Web.Extensions">
+      <HintPath>D:\TankWar\第二版\Final\Server\Game\Game\System.Web.Extensions.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

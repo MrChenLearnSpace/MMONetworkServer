@@ -16,7 +16,7 @@ namespace MMONetworkServer.net {
         public Int32 msgLength = 0;
         public byte[] lenBytes = new byte[sizeof(Int32)];
         public long lastTickTime = 0;
-        public Player player;
+        public IPlayer player;
 
         public Queue<ByteArray> writeQueue = new Queue<ByteArray>();
   
