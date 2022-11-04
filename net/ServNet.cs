@@ -10,7 +10,7 @@ using System.Linq;
 using System.Data;
 using System.Reflection;
 using MMONetworkServer.Core;
-//using MMONetworkServer.Logic;
+//using ServerLoginHotfix;
 namespace MMONetworkServer.net {
     //网络底层 ，使用异步 TCP处理客户端连接，读取客户端消息后分发给HandleConnMsg和HandlePlayerMsg 处理
     public class ServNet {
@@ -179,7 +179,7 @@ namespace MMONetworkServer.net {
             string methodName = "Msg" + name;
             //连接协议分发
             if (conn.player == null || name == "HeatBeat" || name == "Logout") {
-                MethodInfo mm = CodeLoader.GetInstance().Find("MMONetworkServer.Logic.HandleConnMsg").GetType().GetMethod(methodName);
+                MethodInfo mm = CodeLoader.GetInstance().Find("ServerLoginHotfix.HandleConnMsg").GetType().GetMethod(methodName);
                 if (mm == null) {
                     string str = "[警告]HandleMsg没有处理连接方法 ";
                     Console.WriteLine(str + methodName);
@@ -187,11 +187,11 @@ namespace MMONetworkServer.net {
                 }
                 Object[] obj = new object[] { conn, protoBase };
                 Console.WriteLine("[处理连接消息]" + conn.GetAdress() + " :" + name);
-                mm.Invoke(CodeLoader.GetInstance().Find("MMONetworkServer.Logic.HandleConnMsg"), obj);
+                mm.Invoke(CodeLoader.GetInstance().Find("ServerLoginHotfix.HandleConnMsg"), obj);
             }
             //角色协议分发
             else {
-                MethodInfo mm = CodeLoader.GetInstance().Find("MMONetworkServer.Logic.HandlePlayerMsg").GetType().GetMethod(methodName);
+                MethodInfo mm = CodeLoader.GetInstance().Find("ServerLoginHotfix.HandlePlayerMsg").GetType().GetMethod(methodName);
                 if (mm == null) {
                     string str = "[警告]HandleMsg没有处理玩家方法";
                 Console.WriteLine(str + methodName);
@@ -199,7 +199,7 @@ namespace MMONetworkServer.net {
                 }
                 Object[] obj = new object[] { conn.player, protoBase };
                 Console.WriteLine("[处理玩家消息]" + conn.player.GetId() + " :" + name);
-                mm.Invoke(CodeLoader.GetInstance().Find("MMONetworkServer.Logic.HandlePlayerMsg"), obj);
+                mm.Invoke(CodeLoader.GetInstance().Find("ServerLoginHotfix.HandlePlayerMsg"), obj);
             }
         }
 

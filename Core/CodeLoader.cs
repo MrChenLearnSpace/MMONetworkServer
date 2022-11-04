@@ -20,7 +20,7 @@ namespace MMONetworkServer.Core {
         public static CodeLoader GetInstance() {
             return instance;
         }
-        public void Reload( string HotfixPath = @"F:\project\VSProject\ServerLoginHotfix\bin\Debug\netcoreapp3.1\ServerLoginHotfix") {
+        public void Reload( string HotfixPath = @".\ServerLoginHotfix") {
             try {
                 hotfixInstance.Clear();
                 assemblyLoadContext?.Unload();

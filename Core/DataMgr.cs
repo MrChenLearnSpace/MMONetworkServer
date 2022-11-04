@@ -8,7 +8,7 @@ using System.Text.RegularExpressions;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
-//using MMONetworkServer.Logic;
+//using ServerLoginHotfix;
 
 namespace MMONetworkServer.Core {
     //数据库封装，操作mysql数据库，比如:读取角色数据，更新角色数据
