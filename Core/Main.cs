@@ -7,9 +7,10 @@ using MMONetworkServer.net;
 namespace MMONetworkServer {
     public class MainClass{
         static void Main(string[] args) {
+            string dllName = @"ServerLoginHotfix";
             string dllpath = @"F:\project\VSProject\ServerLoginHotfix\bin\Debug\netcoreapp3.1\ServerLoginHotfix";
             CodeLoader codeLoader =new CodeLoader();
-            codeLoader.Reload(dllpath);
+            codeLoader.Reload(dllName,dllpath);
             DataMgr dataMgr = DataMgr.GetInstance();
             ServNet servNet = new ServNet();
            
@@ -25,11 +26,11 @@ namespace MMONetworkServer {
                         servNet.Print();
                         break;
                     case "c" :
-                        codeLoader.Reload(dllpath);
+                        codeLoader.Reload(dllName, dllpath);
                         break;
                     default:
                         string FunStr = "Msg" + str;
-                        codeLoader.FindFunRun("ServerLoginHotfix.LogicManager",FunStr,new object[] { });
+                        codeLoader.FindFunRun(dllName, "ServerLoginHotfix.LogicManager",FunStr,new object[] { });
                         break;
                             
 

@@ -179,27 +179,34 @@ namespace MMONetworkServer.net {
             string methodName = "Msg" + name;
             //连接协议分发
             if (conn.player == null || name == "HeatBeat" || name == "Logout") {
-                MethodInfo mm = CodeLoader.GetInstance().Find("ServerLoginHotfix.HandleConnMsg").GetType().GetMethod(methodName);
+                MethodInfo mm = CodeLoader.GetInstance().Find("ServerLoginHotfix", "ServerLoginHotfix.HandleConnMsg").GetType().GetMethod(methodName);
                 if (mm == null) {
                     string str = "[警告]HandleMsg没有处理连接方法 ";
                     Console.WriteLine(str + methodName);
                     return;
                 }
-                Object[] obj = new object[] { conn, protoBase };
+                //Object[] obj = new object[] { conn, protoBase };
+                //Console.WriteLine("[处理连接消息]" + conn.GetAdress() + " :" + name);
+                //mm.Invoke(CodeLoader.GetInstance().Find("ServerLoginHotfix.HandleConnMsg"), obj);
+                Action<Conn, ProtocolBase> updateDel = (Action<Conn, ProtocolBase>)Delegate.CreateDelegate(typeof(Action<Conn, ProtocolBase>), null, mm);
+
+                updateDel(conn, protoBase);
                 Console.WriteLine("[处理连接消息]" + conn.GetAdress() + " :" + name);
-                mm.Invoke(CodeLoader.GetInstance().Find("ServerLoginHotfix.HandleConnMsg"), obj);
             }
             //角色协议分发
             else {
-                MethodInfo mm = CodeLoader.GetInstance().Find("ServerLoginHotfix.HandlePlayerMsg").GetType().GetMethod(methodName);
+                MethodInfo mm = CodeLoader.GetInstance().Find("ServerLoginHotfix", "ServerLoginHotfix.HandlePlayerMsg").GetType().GetMethod(methodName);
                 if (mm == null) {
                     string str = "[警告]HandleMsg没有处理玩家方法";
                 Console.WriteLine(str + methodName);
                     return;
                 }
-                Object[] obj = new object[] { conn.player, protoBase };
+                //Object[] obj = new object[] { conn.player, protoBase };
+                //Console.WriteLine("[处理玩家消息]" + conn.player.GetId() + " :" + name);
+                //mm.Invoke(CodeLoader.GetInstance().Find("ServerLoginHotfix.HandlePlayerMsg"), obj);
+                Action<IPlayer, ProtocolBase> updateDel = (Action<IPlayer, ProtocolBase>)Delegate.CreateDelegate(typeof(Action<IPlayer, ProtocolBase>), null, mm);
+                updateDel(conn.player, protoBase);
                 Console.WriteLine("[处理玩家消息]" + conn.player.GetId() + " :" + name);
-                mm.Invoke(CodeLoader.GetInstance().Find("ServerLoginHotfix.HandlePlayerMsg"), obj);
             }
         }
 
