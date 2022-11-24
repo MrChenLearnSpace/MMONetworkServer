@@ -8,7 +8,7 @@ using System.Text.RegularExpressions;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
-//using MMONetworkServer.Logic;
+//using ServerLoginHotfix;
 
 namespace MMONetworkServer.Core {
     //数据库封装，操作mysql数据库，比如:读取角色数据，更新角色数据
@@ -84,8 +84,96 @@ namespace MMONetworkServer.Core {
                 return false;
             }
         }
+        public bool CheckPassWord(string id, string pw) {
 
-        public bool CreatePlayer(string id) {
+            //带优化和加强；
+
+            //防sql注入
+            if (!IsSafeStr(id) || !IsSafeStr(pw))
+                return false;
+            //查询
+            string cmdStr = string.Format("select * from user where id='{0}' and pw='{1}';", id, pw);
+            MySqlCommand cmd = new MySqlCommand(cmdStr, sqlConn);
+            try {
+                MySqlDataReader dataReader = cmd.ExecuteReader();
+                bool hasRows = dataReader.HasRows;
+                dataReader.Close();
+                Console.WriteLine("[DataMgr]CheckPassWord has " + hasRows.ToString());
+                return hasRows;
+            }
+            catch (Exception e) {
+                Console.WriteLine("[DataMgr]CheckPassWord " + e.Message);
+                return false;
+            }
+        }
+
+        public bool InsertPlayer(string id,byte[] dataStream,string ip) {
+            if (!IsSafeStr(id))
+                return false;
+            string cmdStr = string.Format("insert into player set id ='{0}' ,data =@data, ip ='{1}' ;", id,ip);
+            MySqlCommand cmd = new MySqlCommand(cmdStr, sqlConn);
+            cmd.Parameters.Add("@data", MySqlDbType.Blob);
+            cmd.Parameters[0].Value = dataStream;
+            try {
+                cmd.ExecuteNonQuery();
+                Console.WriteLine("[DataMgr]CreatePlayer 写入 成功");
+                return true;
+            }
+            catch (Exception e) {
+                Console.WriteLine("[DataMgr]CreatePlayer 写入 " + e.Message);
+                return false;
+            }
+        }
+        public byte[] GetDataStream(string id) {
+            
+            if (!IsSafeStr(id))
+                return null;
+            //查询
+            string cmdStr = string.Format("select * from player where id ='{0}';", id);
+            MySqlCommand cmd = new MySqlCommand(cmdStr, sqlConn);
+            byte[] buffer = new byte[1];
+            try {
+                MySqlDataReader dataReader = cmd.ExecuteReader();
+                if (!dataReader.HasRows) {
+                    dataReader.Close();
+                    return null;
+                }
+                dataReader.Read();
+                long len = dataReader.GetBytes(1, 0, null, 0, 0);//1是data
+                buffer = new byte[len];
+                dataReader.GetBytes(1, 0, buffer, 0, (int)len);
+                dataReader.Close();
+                return buffer;
+            }
+            catch (Exception e) {
+                Console.WriteLine("[DataMgr]GetPlayerData 查询 " + e.Message);
+                return null;
+            }
+        }
+        public bool SavePlayerStream(string id,byte[] playerStream,string ip) {
+            if (!IsSafeStr(id))
+                return false;
+            //byte[] byteArr = stream.ToArray();
+            //写入数据库
+            string formatStr = "update player set data =@data,ip ='{0}' where id = '{1}';";
+            string cmdStr = string.Format(formatStr,ip, id);
+            MySqlCommand cmd = new MySqlCommand(cmdStr, sqlConn);
+            cmd.Parameters.Add("@data", MySqlDbType.Blob);
+            cmd.Parameters[0].Value = playerStream;
+            try {
+                cmd.ExecuteNonQuery();
+                Console.WriteLine("[DataMgr]SavePlayer 写入 成功");
+                return true;
+            }
+            catch (Exception e) {
+                Console.WriteLine("[DataMgr]SavePlayer 写入" + e.Message);
+                return false;
+            }
+        }
+
+        
+
+        /*public bool CreatePlayer(string id) {
                 //防sql注入
                 if (!IsSafeStr(id))
                     return false;
@@ -117,28 +205,7 @@ namespace MMONetworkServer.Core {
                 }
         }
 
-        public bool CheckPassWord(string id, string pw) {
-
-            //带优化和加强；
-
-            //防sql注入
-            if (!IsSafeStr(id) || !IsSafeStr(pw))
-                return false;
-            //查询
-            string cmdStr = string.Format("select * from user where id='{0}' and pw='{1}';", id, pw);
-            MySqlCommand cmd = new MySqlCommand(cmdStr, sqlConn);
-            try {
-                MySqlDataReader dataReader = cmd.ExecuteReader();
-                bool hasRows = dataReader.HasRows;
-                dataReader.Close();
-                Console.WriteLine("[DataMgr]CheckPassWord has " + hasRows.ToString());
-                return hasRows;
-            }
-            catch (Exception e) {
-                Console.WriteLine("[DataMgr]CheckPassWord " + e.Message);
-                return false;
-            }
-        }
+        
 
         public PlayerData GetPlayerData(string id) {
             PlayerData playerData = null;
@@ -208,7 +275,7 @@ namespace MMONetworkServer.Core {
                   Console.WriteLine("[DataMgr]SavePlayer 写入" + e.Message);
               return false;
               }
-        }
+        }*/
 
     }
 }
