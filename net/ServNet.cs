@@ -175,10 +175,11 @@ namespace MMONetworkServer.net {
 
         private void HandleMsg(Conn conn, ProtocolBase protoBase) {
             
-            string name = protoBase.GetName();
-            string methodName = "Msg" + name;
+            string methodName = protoBase.GetName();
+           // string methodName = "Msg" + name;
             //连接协议分发
-            if (conn.player == null || name == "HeatBeat" || name == "Logout") {
+           // if (conn.player == null || name == "HeatBeat" || name == "Logout") {
+            if (conn.player == null || methodName == "HeatBeat" || methodName == "MsgLogout") {
                 MethodInfo mm = CodeLoader.GetInstance().Find("ServerLoginHotfix", "ServerLoginHotfix.HandleConnMsg").GetType().GetMethod(methodName);
                 if (mm == null) {
                     string str = "[警告]HandleMsg没有处理连接方法 ";
@@ -191,7 +192,7 @@ namespace MMONetworkServer.net {
                 Action<Conn, ProtocolBase> updateDel = (Action<Conn, ProtocolBase>)Delegate.CreateDelegate(typeof(Action<Conn, ProtocolBase>), null, mm);
 
                 updateDel(conn, protoBase);
-                Console.WriteLine("[处理连接消息]" + conn.GetAdress() + " :" + name);
+                Console.WriteLine("[处理连接消息]" + conn.GetAdress() + " :" + methodName);
             }
             //角色协议分发
             else {
@@ -206,7 +207,7 @@ namespace MMONetworkServer.net {
                 //mm.Invoke(CodeLoader.GetInstance().Find("ServerLoginHotfix.HandlePlayerMsg"), obj);
                 Action<IPlayer, ProtocolBase> updateDel = (Action<IPlayer, ProtocolBase>)Delegate.CreateDelegate(typeof(Action<IPlayer, ProtocolBase>), null, mm);
                 updateDel(conn.player, protoBase);
-                Console.WriteLine("[处理玩家消息]" + conn.player.GetId() + " :" + name);
+                Console.WriteLine("[处理玩家消息]" + conn.player.GetId() + " :" + methodName);
             }
         }
 
