@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Newtonsoft.Json;
 using MMONetworkServer.Core;
-
+using MMONetworkServer.net;
 public class MsgBase {
     ProtocolBytes protocolBytes;
     public string protoName = "null";
@@ -18,7 +18,7 @@ public class MsgBase {
         int start = 0;
         protoName = protocol.GetString(start, ref start);
         string json = protocol.GetString(start, ref start);
-        return (MsgBase)JsonConvert.DeserializeObject(json, CodeLoader.instance.hotfixDictionary["ServerLoginHotfix"].GetType(protoName));
+        return (MsgBase)JsonConvert.DeserializeObject(json, CodeLoader.instance.hotfixDictionary[ServNet.instance.HandleDllName].GetType(protoName));
 
     }
     public virtual string GetName() {

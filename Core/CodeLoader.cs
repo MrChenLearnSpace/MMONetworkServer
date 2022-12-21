@@ -56,7 +56,8 @@ namespace MMONetworkServer.Core {
                 Assembly temphotfix = assemblyLoadContext.LoadFromStream(new MemoryStream(dllBytes), new MemoryStream(pdbBytes));
                 hotfixDictionary.Add(dllName, temphotfix);
                 Dictionary<string, object> tempInstance = new Dictionary<string, object>();
-                foreach (Type type in temphotfix.GetTypes()) {
+                foreach (Type type in temphotfix.GetExportedTypes()) {
+                
                     object instance = Activator.CreateInstance(type);
                     tempInstance.Add(type.FullName, instance);
                     Console.WriteLine(type.FullName);

@@ -15,27 +15,28 @@ namespace MMONetworkServer.Core {
     public class DataMgr {
         MySqlConnection sqlConn;
         public static DataMgr instance;
+      //  public string Database = "game";
         private static readonly object syncRoot = new object();
-        public DataMgr() {
-            Connect();
+        public DataMgr(string Database) {
+            Connect(Database);
         }
-        public static DataMgr GetInstance() {
+        public static DataMgr GetInstance(string Database) {
             if (instance == null) {//先判断实例是否存在，不存在再加锁处理
                 lock (syncRoot) {
                     if (instance == null) {
-                        instance = new DataMgr();
+                        instance = new DataMgr(Database);
                     }
                 }
             }
             return instance;
         }
-        public void Connect() {
-            string connStr = "Database=game;Data Source=127.0.0.1;";
+        public void Connect(string Database) {
+            string connStr = "Database=" +Database+";Data Source=127.0.0.1;";
             connStr += "User Id=root;Password=tankwar;port=3306";
             sqlConn = new MySqlConnection(connStr);
             try {
                 sqlConn.Open();
-                Console.WriteLine("game数据库打开成功");
+                Console.WriteLine(Database + "数据库打开成功");
             }
             catch (Exception e) {
                 Console.WriteLine(e.Message);

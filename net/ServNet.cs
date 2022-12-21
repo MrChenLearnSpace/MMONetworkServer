@@ -22,7 +22,7 @@ namespace MMONetworkServer.net {
 
         public static ServNet instance;
 
-
+        public string HandleDllName = "null";
 
         //主定时器
         System.Timers.Timer timer = new System.Timers.Timer(1000);
@@ -33,12 +33,7 @@ namespace MMONetworkServer.net {
         public bool isShowTime;
         //心跳时间
         public long heartBeatTime = 800;
-        /*
-                //消息分发
-                public HandleConnMsg handleConnMsg = new HandleConnMsg();
-                public HandlePlayerMsg handlePlayerMsg = new HandlePlayerMsg();
-                public HandlePlayerEvent handlePlayerEvent = new HandlePlayerEvent();
-        */
+
 
         public ServNet() {
             instance = this;
@@ -105,7 +100,7 @@ namespace MMONetworkServer.net {
             if (!conn.isUse)
                 return;
             lock (conn) {
-                try {
+               // try {
                     int count = conn.socket.EndReceive(ar);//返回接收的字节数
                                                            //没有信息就关闭
                     
@@ -122,10 +117,10 @@ namespace MMONetworkServer.net {
                     }
                     //继续接收
                     conn.socket.BeginReceive(conn.readBuff.bytes, conn.readBuff.writeIdx, conn.BuffRemain(), SocketFlags.None, ReciveCb, conn);
-                }
+              /*  }
                 catch (Exception e) {
                     Console.WriteLine("Recive失败" + e.Message);
-                }
+                }*/
             }
         }
 
@@ -142,28 +137,10 @@ namespace MMONetworkServer.net {
                 return;
             }
             ProtocolBase protocol = proto.Decode(conn.readBuff.bytes, sizeof(Int32), conn.msgLength);
-            Console.WriteLine("Name: "+protocol.GetName()+ "GetDesc: " + protocol.GetDesc());
+          //  Console.WriteLine("Name: "+protocol.GetName()+ "GetDesc: " + protocol.GetDesc());
             HandleMsg(conn, protocol);
 
-
-
-            //这里接收信息有个细节，因为之前发送回来的信息又被加了一次长度，相当于要把他所有的信息接收完了
-            //才算接收成功，然后再把前面的sizeof(Int32)去掉，剩下的就是带长度的信息了
-            /*ProtocolByte proto = new ProtocolByte();
-            ProtocolByte protoStr = new ProtocolByte();
-            ProtocolByte protocol = proto.Decode(conn.readBuff, sizeof(Int32), conn.msgLength) as ProtocolByte;
-            protoStr.AddString(conn.GetAdress());
-            protocol.bytes = protoStr.bytes.Concat(protocol.bytes).ToArray();
-            lock (msgHandle.msgList) {
-                msgHandle.msgList.Add(protocol);
-            }
-            Console.WriteLine(protocol.GetDesc());
-*/
-
             //清除已处理的消息
-            //int count = conn.buffCount - conn.msgLength - sizeof(Int32);
-            //Array.Copy(conn.readBuff, sizeof(Int32) + conn.msgLength, conn.readBuff, 0, count);
-            //conn.buffCount = count;
             int count = sizeof(Int32) + conn.msgLength;
             conn.readBuff.readIdx += count;
             conn.readBuff.CheckAndMoveBytes();
@@ -179,16 +156,13 @@ namespace MMONetworkServer.net {
            // string methodName = "Msg" + name;
             //连接协议分发
            // if (conn.player == null || name == "HeatBeat" || name == "Logout") {
-            if (conn.player == null || methodName == "HeatBeat" || methodName == "MsgLogout") {
-                MethodInfo mm = CodeLoader.GetInstance().Find("ServerLoginHotfix", "ServerLoginHotfix.HandleConnMsg").GetType().GetMethod(methodName);
+            if (conn.player == null || methodName == "MsgHeatBeat" || methodName == "MsgLogout") {
+                MethodInfo mm = CodeLoader.GetInstance().Find(HandleDllName, HandleDllName+ ".HandleConnMsg").GetType().GetMethod(methodName);
                 if (mm == null) {
-                    string str = "[警告]HandleMsg没有处理连接方法 ";
+                    string str = "[警告]ConnHandleMsg没有处理连接方法 ";
                     Console.WriteLine(str + methodName);
                     return;
                 }
-                //Object[] obj = new object[] { conn, protoBase };
-                //Console.WriteLine("[处理连接消息]" + conn.GetAdress() + " :" + name);
-                //mm.Invoke(CodeLoader.GetInstance().Find("ServerLoginHotfix.HandleConnMsg"), obj);
                 Action<Conn, ProtocolBase> updateDel = (Action<Conn, ProtocolBase>)Delegate.CreateDelegate(typeof(Action<Conn, ProtocolBase>), null, mm);
 
                 updateDel(conn, protoBase);
@@ -196,15 +170,12 @@ namespace MMONetworkServer.net {
             }
             //角色协议分发
             else {
-                MethodInfo mm = CodeLoader.GetInstance().Find("ServerLoginHotfix", "ServerLoginHotfix.HandlePlayerMsg").GetType().GetMethod(methodName);
+                MethodInfo mm = CodeLoader.GetInstance().Find(HandleDllName, HandleDllName +".HandlePlayerMsg").GetType().GetMethod(methodName);
                 if (mm == null) {
-                    string str = "[警告]HandleMsg没有处理玩家方法";
+                    string str = "[警告]PlayerHandleMsg没有处理玩家方法";
                 Console.WriteLine(str + methodName);
                     return;
                 }
-                //Object[] obj = new object[] { conn.player, protoBase };
-                //Console.WriteLine("[处理玩家消息]" + conn.player.GetId() + " :" + name);
-                //mm.Invoke(CodeLoader.GetInstance().Find("ServerLoginHotfix.HandlePlayerMsg"), obj);
                 Action<IPlayer, ProtocolBase> updateDel = (Action<IPlayer, ProtocolBase>)Delegate.CreateDelegate(typeof(Action<IPlayer, ProtocolBase>), null, mm);
                 updateDel(conn.player, protoBase);
                 Console.WriteLine("[处理玩家消息]" + conn.player.GetId() + " :" + methodName);
@@ -238,7 +209,7 @@ namespace MMONetworkServer.net {
                 if (!conns[i].isUse) continue;
                 if (conns[i].player == null) continue;
                 // Send(conns[i], protocol);
-                conns[i].Send(protocol);
+                conns[i].AsySend(protocol);
             }
         }
         public string GetLocalIp() {
