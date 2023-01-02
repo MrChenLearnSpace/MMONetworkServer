@@ -34,7 +34,10 @@ namespace CSLogicHotfix {
             conn.Send(protocol);
             //ServNet.instance.Send(conn, protocol);
         }
-
+        public void SendAsync(ProtocolBase protocol) {
+            if (conn == null) return;
+            conn.SendAsync(protocol);
+        }
 
         public bool Logout() {
             //ServNet.instance.handlePlayerEvent.OnLogout(this);

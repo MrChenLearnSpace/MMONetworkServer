@@ -42,25 +42,20 @@ namespace CSLogicHotfix {
         public static void ReflashRooms() {
             var collection = ((Mongo)DataMgr.instance.database).database.GetCollection<Room>("rooms");
             FilterDefinition<Room> findDefinition = Builders<Room>.Filter.Empty;
-            List<Room> rooms = collection.Find(findDefinition).ToList();
-
-            //if (rooms.ContainsKey(id)) {
-            //    return rooms[id];
-            //}
-            // FilterDefinition<Room> findDefinition = Builders<Room>.Filter.Eq("id",room.id);
-            // UpdateDefinition<Room> update = Builders<Room>.Update
-            //     .Set("ownerId", room.ownerId).Set("playerIds", room.playerIds).Set("status", room.status);
-
-            //((Mongo)DataMgr.instance.database).database.GetCollection<Room>("room").UpdateOne(findDefinition).ToList()[0];
+            List<Room> roomslist = collection.Find(findDefinition).ToList();
+            rooms.Clear();
+            foreach(Room room in roomslist) {
+                rooms.Add(room.id, room);
+            }
             return ;
         }
         public static void SaveRooms() {
             var collection = ((Mongo)DataMgr.instance.database).database.GetCollection<Room>("rooms");
             FilterDefinition<Room> filter =Builders<Room>.Filter.Empty;
             collection.DeleteMany(filter);
-            foreach (Room room in rooms.Values) {            
-                    collection.InsertOne(room);
-            }
+
+            collection.InsertMany(rooms.Values.ToList());
+            
         }
     }
 }
