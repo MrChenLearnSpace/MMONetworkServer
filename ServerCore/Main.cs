@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 namespace ServerCore {
     public class MainClass {
         static void Main(string[] args) {
-            string dllName = "LogicHotfix";
-            string dllPath = "F:\\project\\VSProject\\MMONetworkServer\\LogicHotfix\\bin\\Debug\\net6.0\\LogicHotfix";
+            string dllName = "CSLogicHotfix";
+            string dllPath = "F:\\project\\VSProject\\MMONetworkServer\\CSLogicHotfix\\bin\\Debug\\net6.0\\CSLogicHotfix";
             CodeLoader code = new CodeLoader();
             code.Reload(dllName,dllPath);
             code.FindFunRun(dllName, dllName + ".LogicManager", "Init", new object[] { });

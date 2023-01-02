@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "UpDSocOAtl3DnBLQVKEMrVXATimyjc6TP49sr4q5NFeCJ2SM1PizBzUGU0cR2bNQgWTgiGjxr6C9GfNYwe2pYg==",
+  "dgSpecHash": "7/xs74jFPF2KdmbEleGEHzXxMIK6QGq9PqGp36aLiQqlsuYurLUHIr6DqRypWvSj/tXgyEAeD0RrSHsJybyvvg==",
   "success": true,
-  "projectFilePath": "F:\\project\\VSProject\\MMONetworkServer\\ServerCore\\ServerCore.csproj",
+  "projectFilePath": "F:\\project\\VSProject\\MMONetworkServer\\CSLogicHotfix\\CSLogicHotfix.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\27371\\.nuget\\packages\\dnsclient\\1.6.1\\dnsclient.1.6.1.nupkg.sha512",
     "C:\\Users\\27371\\.nuget\\packages\\google.protobuf\\3.19.4\\google.protobuf.3.19.4.nupkg.sha512",
