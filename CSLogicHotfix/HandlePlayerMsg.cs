@@ -106,13 +106,6 @@ namespace CSLogicHotfix {
             //}
 
         }
-        float RandomFloat(float Min,float Max, Random random) {
-            float index =  (float)random.NextDouble();
-            float length = Max - Min;
-            index *= length;
-            index += Min;
-            return index;
-
-        }
+        
     }
 }
