@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33122.133
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerCore", "ServerCore\ServerCore.csproj", "{E7E0D6D9-134A-480F-B188-130FA9F635AA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServerCore", "ServerCore\ServerCore.csproj", "{E7E0D6D9-134A-480F-B188-130FA9F635AA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogicHotfix", "LogicHotfix\LogicHotfix.csproj", "{08AD275E-76A7-4645-9310-1F59CEEE8786}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSLogicHotfix", "CSLogicHotfix\CSLogicHotfix.csproj", "{A6433B23-8C85-4A23-8988-E3EFD5C38A3D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{E7E0D6D9-134A-480F-B188-130FA9F635AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E7E0D6D9-134A-480F-B188-130FA9F635AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E7E0D6D9-134A-480F-B188-130FA9F635AA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{08AD275E-76A7-4645-9310-1F59CEEE8786}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{08AD275E-76A7-4645-9310-1F59CEEE8786}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{08AD275E-76A7-4645-9310-1F59CEEE8786}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{08AD275E-76A7-4645-9310-1F59CEEE8786}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A6433B23-8C85-4A23-8988-E3EFD5C38A3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6433B23-8C85-4A23-8988-E3EFD5C38A3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6433B23-8C85-4A23-8988-E3EFD5C38A3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6433B23-8C85-4A23-8988-E3EFD5C38A3D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

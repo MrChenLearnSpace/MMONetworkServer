@@ -511,6 +511,21 @@
         "runtime": {
           "lib/net6.0/ZstdSharp.dll": {}
         }
+      },
+      "ServerCore/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v6.0",
+        "dependencies": {
+          "MongoDB.Driver": "2.18.0",
+          "MySql.Data": "8.0.31",
+          "Newtonsoft.Json": "13.0.2"
+        },
+        "compile": {
+          "bin/placeholder/ServerCore.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ServerCore.dll": {}
+        }
       }
     }
   },
@@ -1328,13 +1343,18 @@
         "zstdsharp.port.0.6.2.nupkg.sha512",
         "zstdsharp.port.nuspec"
       ]
+    },
+    "ServerCore/1.0.0": {
+      "type": "project",
+      "path": "../ServerCore/ServerCore.csproj",
+      "msbuildProject": "../ServerCore/ServerCore.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net6.0": [
       "MongoDB.Driver >= 2.18.0",
-      "MySql.Data >= 8.0.31",
-      "Newtonsoft.Json >= 13.0.2"
+      "Newtonsoft.Json >= 13.0.2",
+      "ServerCore >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -1345,11 +1365,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "F:\\project\\VSProject\\MMONetworkServer\\ServerCore\\ServerCore.csproj",
-      "projectName": "ServerCore",
-      "projectPath": "F:\\project\\VSProject\\MMONetworkServer\\ServerCore\\ServerCore.csproj",
+      "projectUniqueName": "F:\\project\\VSProject\\MMONetworkServer\\CSLogicHotfix\\CSLogicHotfix.csproj",
+      "projectName": "CSLogicHotfix",
+      "projectPath": "F:\\project\\VSProject\\MMONetworkServer\\CSLogicHotfix\\CSLogicHotfix.csproj",
       "packagesPath": "C:\\Users\\27371\\.nuget\\packages\\",
-      "outputPath": "F:\\project\\VSProject\\MMONetworkServer\\ServerCore\\obj\\",
+      "outputPath": "F:\\project\\VSProject\\MMONetworkServer\\CSLogicHotfix\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "E:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
@@ -1372,7 +1392,11 @@
       "frameworks": {
         "net6.0": {
           "targetAlias": "net6.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "F:\\project\\VSProject\\MMONetworkServer\\ServerCore\\ServerCore.csproj": {
+              "projectPath": "F:\\project\\VSProject\\MMONetworkServer\\ServerCore\\ServerCore.csproj"
+            }
+          }
         }
       },
       "warningProperties": {
@@ -1388,10 +1412,6 @@
           "MongoDB.Driver": {
             "target": "Package",
             "version": "[2.18.0, )"
-          },
-          "MySql.Data": {
-            "target": "Package",
-            "version": "[8.0.31, )"
           },
           "Newtonsoft.Json": {
             "target": "Package",
