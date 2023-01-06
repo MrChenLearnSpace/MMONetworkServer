@@ -22,7 +22,7 @@ namespace CSLogicHotfix {
         public Conn Connect { get => conn; set => conn =value; }
 
         //public int Id { get; set; }
-        
+        public Player() { }
         public Player(string id, Conn conn) {
             this.id = id;
             this.conn = conn;

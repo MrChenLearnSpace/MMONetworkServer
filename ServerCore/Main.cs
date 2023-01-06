@@ -12,13 +12,16 @@ namespace ServerCore {
             string dllPath = "F:\\project\\VSProject\\MMONetworkServer\\CSLogicHotfix\\bin\\Debug\\net6.0\\CSLogicHotfix";
             CodeLoader code = new CodeLoader();
             code.Reload(dllName,dllPath);
+           
             code.FindFunRun(dllName, dllName + ".LogicManager", "Init", new object[] { });
+           
             while (true) {
                 string str = Console.ReadLine();
                 switch (str) {
                     case "c" :
                         code.Reload(dllName, dllPath);
                         break;
+
                     default:
                         string FunStr = "Msg" + str;
                         code.FindFunRun(dllName, dllName + ".LogicManager", FunStr, new object[] { });

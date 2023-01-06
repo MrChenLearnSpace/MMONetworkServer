@@ -14,7 +14,7 @@ namespace CSLogicHotfix {
             dataMgr.Connect("csgo", "127.0.0.1", "27017", "root", "");
             ServNet servNet =new ServNet();
             servNet.HandleDllName = "CSLogicHotfix";
-            servNet.Start("127.0.0.1", 6521);
+            servNet.Start("127.0.0.1", 33333);
             
         }
 
@@ -89,7 +89,9 @@ namespace CSLogicHotfix {
          }*/
         #endregion
         #region debug部分
-
-        #endregion
-    }
+        public static void MsgAABB() {
+            Console.WriteLine("AABB");
+        }
+            #endregion
+        }
 }

@@ -35,8 +35,8 @@ namespace CSLogicHotfix {
                 Console.WriteLine("Player is null");
                 return;
             }
-            
-            
+
+
         }
     }
 }

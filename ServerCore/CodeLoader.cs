@@ -6,11 +6,12 @@ using System.Runtime.Loader;
 
 namespace ServerCore {
     public class CodeLoader {
+      
         AssemblyLoadContext assemblyLoadContext;
         public Assembly hotfix;
         public Dictionary<string, Assembly> hotfixDictionary = new Dictionary<string, Assembly>();
         //Dictionary<string, object> hotfixInstance = new Dictionary<string, object>();
-        Dictionary<string, Dictionary<string, object>> hotfixInstance = new Dictionary<string, Dictionary<string, object>>();
+        public  Dictionary<string, Dictionary<string, object>> hotfixInstance = new Dictionary<string, Dictionary<string, object>>();
         public static CodeLoader instance;
 
         public CodeLoader() {
@@ -45,7 +46,7 @@ namespace ServerCore {
         //        Console.WriteLine("[ServerCore.Core.CodeLoader]"+ e.ToString());
         //    }
         //}
-        public void Reload(string dllName = "LogicHotfix", string HotfixPath = @".\LogicHotfix") {
+        public void Reload(string dllName , string HotfixPath ) {
             assemblyLoadContext?.Unload();
 
             if (!hotfixDictionary.ContainsKey(dllName)) {
@@ -57,8 +58,8 @@ namespace ServerCore {
                 Dictionary<string, object> tempInstance = new Dictionary<string, object>();
                 foreach (Type type in temphotfix.GetExportedTypes()) {
                     //GetTypes替换为GetExportedTypes
-                    object instance = Activator.CreateInstance(type);
-                    tempInstance.Add(type.FullName, instance);
+                    object objInstance = Activator.CreateInstance(type);
+                    tempInstance.Add(type.FullName, objInstance);
                     Console.WriteLine(type.FullName);
                 }
                 hotfixInstance.Add(dllName, tempInstance);
@@ -71,12 +72,13 @@ namespace ServerCore {
                 byte[] pdbBytes = File.ReadAllBytes(HotfixPath + ".pdb");//加载pdb
                 hotfixDictionary[dllName] = assemblyLoadContext.LoadFromStream(new MemoryStream(dllBytes), new MemoryStream(pdbBytes));
                 foreach (Type type in hotfixDictionary[dllName].GetExportedTypes()) {
-                    object instance = Activator.CreateInstance(type);
-                    hotfixInstance[dllName].Add(type.FullName, instance);
+                    object objInstance = Activator.CreateInstance(type);
+                    hotfixInstance[dllName].Add(type.FullName, objInstance);
                     Console.WriteLine(type.FullName);
                 }
 
             }
+           // isfishing = true;
             //GC.Collect();
         }
         public object Find(string assembly, string className) {
