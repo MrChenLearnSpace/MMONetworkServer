@@ -13,30 +13,29 @@ using Google.Protobuf.WellKnownTypes;
 
 namespace CSLogicHotfix {
     public class Player : IPlayer {
-        public string id;
-        public Conn conn;
+   
         public PlayerData data;
         public PlayerTempData tempData;
 
-        public string Id { get => id; set => id =value; }
-        public Conn Connect { get => conn; set => conn =value; }
+        
+      
 
         //public int Id { get; set; }
         public Player() { }
         public Player(string id, Conn conn) {
             this.id = id;
-            this.conn = conn;
+            this.client = conn;
             tempData = new PlayerTempData();
         }
-        public void Send(ProtocolBase protocol) {
-            if (conn == null)
+        public override void Send(ProtocolBase protocol) {
+            if (client == null)
                 return;
-            conn.Send(protocol);
+            client.Send(protocol);
             //ServNet.instance.Send(conn, protocol);
         }
         public void SendAsync(ProtocolBase protocol) {
-            if (conn == null) return;
-            conn.SendAsync(protocol);
+            if (client == null) return;
+            client.SendAsync(protocol);
         }
 
         public bool Logout() {
@@ -46,8 +45,8 @@ namespace CSLogicHotfix {
             HandlePlayerEvent.OnLogout(this);
             if (!SavePlayer())
                 return false;
-            conn.player = null;
-            conn.Close();
+            client.player = null;
+            client.Close();
             return true;
         }
         public bool SavePlayer() {
@@ -55,7 +54,7 @@ namespace CSLogicHotfix {
                 if (!DataMgr.instance.IsSafeStr(id))
                     return false;
                 FilterDefinition<PlayerSaveData> filter = Builders<PlayerSaveData>.Filter.Eq("id", id);
-                UpdateDefinition<PlayerSaveData> update = Builders<PlayerSaveData>.Update.Set("playerData", data).Set("ip", conn.GetAdress()).Set("tempData",tempData);
+                UpdateDefinition<PlayerSaveData> update = Builders<PlayerSaveData>.Update.Set("playerData", data).Set("ip", client.GetAdress()).Set("tempData",tempData);
                 
                 UpdateResult result = ((Mongo)DataMgr.instance.database).database.GetCollection<PlayerSaveData>("player").UpdateOne(filter, update);
                 return result.IsAcknowledged;

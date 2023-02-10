@@ -11,6 +11,7 @@ namespace CSLogicHotfix {
         public static  void Init() {
             
             DataMgr dataMgr = DataMgr.GetInstance();
+            dataMgr.database = new Mongo();
             dataMgr.Connect("csgo", "127.0.0.1", "27017", "root", "");
             ServNet servNet =new ServNet();
             servNet.HandleDllName = "CSLogicHotfix";

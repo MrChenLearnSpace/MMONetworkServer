@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing.Printing;
 using System.Linq;
 
 
@@ -30,9 +31,10 @@ public class ProtocolBytes : ProtocolBase {
     }
     #region 字节辅助流
     public void AddString(string str) {
-        Int32 len = str.Length;
-        byte[] lenBytes = BitConverter.GetBytes(len);
         byte[] strBytes = System.Text.Encoding.UTF8.GetBytes(str);
+        Int32 len = strBytes.Length;
+        byte[] lenBytes = BitConverter.GetBytes(len);
+        //Console.WriteLine(strBytes.Length);
         if (bytes == null)
             bytes = lenBytes.Concat(strBytes).ToArray();
         else

@@ -1,7 +1,7 @@
 {
   "version": 2,
-  "dgSpecHash": "7/xs74jFPF2KdmbEleGEHzXxMIK6QGq9PqGp36aLiQqlsuYurLUHIr6DqRypWvSj/tXgyEAeD0RrSHsJybyvvg==",
-  "success": true,
+  "dgSpecHash": "TCJniGljYt8aAasE48oLN4pHso0H3PRl1L/wiNjCq18OvsICSaovgJN8eAVf2OdfEXkDJhdfAMpEAJ8IKT84nQ==",
+  "success": false,
   "projectFilePath": "F:\\project\\VSProject\\MMONetworkServer\\CSLogicHotfix\\CSLogicHotfix.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\27371\\.nuget\\packages\\dnsclient\\1.6.1\\dnsclient.1.6.1.nupkg.sha512",
@@ -35,5 +35,15 @@
     "C:\\Users\\27371\\.nuget\\packages\\system.windows.extensions\\4.7.0\\system.windows.extensions.4.7.0.nupkg.sha512",
     "C:\\Users\\27371\\.nuget\\packages\\zstdsharp.port\\0.6.2\\zstdsharp.port.0.6.2.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "NU1605",
+      "level": "Error",
+      "message": "检测到包降级: MongoDB.Driver 从 2.19.0 降级到 2.18.0。直接从项目引用包以选择不同版本。 \r\n CSLogicHotfix -> ServerCore -> MongoDB.Driver (>= 2.19.0) \r\n CSLogicHotfix -> MongoDB.Driver (>= 2.18.0)",
+      "libraryId": "MongoDB.Driver",
+      "targetGraphs": [
+        "net6.0"
+      ]
+    }
+  ]
 }

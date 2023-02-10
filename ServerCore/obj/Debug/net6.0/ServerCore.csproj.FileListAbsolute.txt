@@ -45,3 +45,5 @@ F:\project\VSProject\MMONetworkServer\ServerCore\obj\Debug\net6.0\refint\ServerC
 F:\project\VSProject\MMONetworkServer\ServerCore\obj\Debug\net6.0\ServerCore.pdb
 F:\project\VSProject\MMONetworkServer\ServerCore\obj\Debug\net6.0\ServerCore.genruntimeconfig.cache
 F:\project\VSProject\MMONetworkServer\ServerCore\obj\Debug\net6.0\ref\ServerCore.dll
+F:\project\VSProject\MMONetworkServer\ServerCore\bin\Debug\net6.0\AWSSDK.Core.dll
+F:\project\VSProject\MMONetworkServer\ServerCore\bin\Debug\net6.0\AWSSDK.SecurityToken.dll

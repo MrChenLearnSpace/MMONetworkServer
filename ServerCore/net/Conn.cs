@@ -51,6 +51,7 @@ namespace ServerCore.net {
             socket.Shutdown(SocketShutdown.Both);
             socket.Close();
             isUse = false;
+            ServNet.instance.clients.Remove(this);
         }
         //同步发送
         public void Send(ProtocolBase protol) {
@@ -60,6 +61,7 @@ namespace ServerCore.net {
             byte[] bytes = protol.Encode();
             byte[] length = BitConverter.GetBytes(bytes.Length);
             byte[] sendbuff = length.Concat(bytes).ToArray();
+            //Console.WriteLine(sendbuff.Length);
             socket.Send(sendbuff);
         }
         public void SendAsync(ProtocolBase protol) {

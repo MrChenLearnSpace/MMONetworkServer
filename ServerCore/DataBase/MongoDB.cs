@@ -32,7 +32,7 @@ namespace ServerCore {
                 return false;
             }
             BsonDocument file = new BsonDocument {
-                {"id",id },
+                {"_id",id },
                 { "pw", pw }
             };
             collection.InsertOne(file);
@@ -41,7 +41,7 @@ namespace ServerCore {
 
         public bool CheckPassWord(string id, string pw) {
             FilterDefinition<BsonDocument> filterDefinition = Builders<BsonDocument>.Filter.Where(
-                x =>  x["id"] == id && x["pw"] == pw);
+                x =>  x["_id"] == id && x["pw"] == pw);
             var collection = database.GetCollection<BsonDocument>("account");
             if (collection.Find(filterDefinition).ToList().Count > 0) {
                 return true;
@@ -49,6 +49,16 @@ namespace ServerCore {
             return false;
         }
 
+        public bool InsertPlayerData(string id, string playerStream, string ip) {
+            throw new NotImplementedException();
+        }
 
+        public string GetPlayerData(string id) {
+            throw new NotImplementedException();
+        }
+
+        public bool SavePlayerData(string id, string playerStream, string ip) {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -8,8 +8,13 @@ using System.Threading.Tasks;
 namespace ServerCore {
     public class MainClass {
         static void Main(string[] args) {
-            string dllName = "CSLogicHotfix";
-            string dllPath = "F:\\project\\VSProject\\MMONetworkServer\\CSLogicHotfix\\bin\\Debug\\net6.0\\CSLogicHotfix";
+            //string dllName = "CSLogicHotfix";
+            // string dllPath = "F:\\project\\VSProject\\MMONetworkServer\\CSLogicHotfix\\bin\\Debug\\net6.0\\CSLogicHotfix";
+            //string dllName = "ServerLoginHotfix";
+            //string dllPath = "F:\\project\\VSProject\\ServerLoginHotfix\\bin\\Debug\\net6.0\\ServerLoginHotfix";
+            string dllName = "ChildLogicHotfix";
+            string dllPath = "F:\\project\\VSProject\\ChildLogicHotfix\\bin\\Debug\\net6.0\\ChildLogicHotfix";
+
             CodeLoader code = new CodeLoader();
             code.Reload(dllName,dllPath);
            

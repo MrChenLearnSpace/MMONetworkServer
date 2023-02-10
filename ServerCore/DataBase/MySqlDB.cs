@@ -134,7 +134,7 @@ namespace ServerCore {
                 return false;
             //byte[] byteArr = stream.ToArray();
             //写入数据库
-            string formatStr = "update player set data ={2},ip ='{0}' where id = '{1}';";
+            string formatStr = "update player set data ='{2}',ip ='{0}' where id = '{1}';";
             string cmdStr = string.Format(formatStr, ip, id, playerStream);
             MySqlCommand cmd = new MySqlCommand(cmdStr, sqlConn);
             try {

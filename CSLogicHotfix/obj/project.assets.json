@@ -516,7 +516,7 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v6.0",
         "dependencies": {
-          "MongoDB.Driver": "2.18.0",
+          "MongoDB.Driver": "2.19.0",
           "MySql.Data": "8.0.31",
           "Newtonsoft.Json": "13.0.2"
         },
@@ -1437,5 +1437,16 @@
         "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.101\\RuntimeIdentifierGraph.json"
       }
     }
-  }
+  },
+  "logs": [
+    {
+      "code": "NU1605",
+      "level": "Error",
+      "message": "检测到包降级: MongoDB.Driver 从 2.19.0 降级到 2.18.0。直接从项目引用包以选择不同版本。 \r\n CSLogicHotfix -> ServerCore -> MongoDB.Driver (>= 2.19.0) \r\n CSLogicHotfix -> MongoDB.Driver (>= 2.18.0)",
+      "libraryId": "MongoDB.Driver",
+      "targetGraphs": [
+        "net6.0"
+      ]
+    }
+  ]
 }

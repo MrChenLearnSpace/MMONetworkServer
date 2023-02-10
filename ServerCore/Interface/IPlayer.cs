@@ -1,22 +1,24 @@
 ﻿using ServerCore.net;
+using System;
 
 namespace ServerCore {
-    public interface IPlayer {
-        string Id { get; set; }
-        Conn Connect { get; set; }
+    public abstract class IPlayer {
+        public string id ;
+        public Conn client;
+        
         //public string Name { get; set; }
-        void Send(ProtocolBase protocol);
+        public virtual  void Send(ProtocolBase protocol) {}
         //bool KickOff(string id, ProtocolBase proto);
 
-        bool Logout();
+       public virtual bool  Logout() { Console.WriteLine("IPlayer Logout is flase"); return false; }
         // Conn GetConn();
 
         // string GetId();
 
 
-        bool SavePlayer();
+        public virtual bool SavePlayer() { Console.WriteLine("IPlayer SavePlayer is flase"); return false; }
 
-        bool GetPlayerData();
+        public virtual bool GetPlayerData() { Console.WriteLine("IPlayer GetPlayerData is flase"); return false; }
         // public byte[] Serialize(IPlayer player);
 
     }

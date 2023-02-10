@@ -12,7 +12,7 @@ namespace ServerCore {
         //  public string Database = "game";
         private static readonly object syncRoot = new object();
         public DataMgr() {
-            database = new Mongo();
+            //database = new Mongo();
         }
         public static DataMgr GetInstance() {
             if (instance == null) {//先判断实例是否存在，不存在再加锁处理
@@ -46,9 +46,14 @@ namespace ServerCore {
             return database.CheckPassWord(id,pw);
 
         }
-
+        public bool  InsertPlayer(string id , string buff, string ip) {
+            return database.InsertPlayerData(id, buff, ip);
+        }
         public bool SavePlayerStream(string id, string playerStream, string ip) {
-            throw new NotImplementedException();
+            return  database.SavePlayerData(id, playerStream, ip);
+        }
+        public string  GetPlayerData(string id) {
+            return database.GetPlayerData(id);
         }
     }
 }

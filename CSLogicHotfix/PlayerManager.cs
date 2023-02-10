@@ -13,14 +13,15 @@ namespace CSLogicHotfix {
             players.Clear();
             List<Conn> clients = ServNet.instance.clients;
             for (int i = 0; i < clients.Count; i++) {
-                clients[i].player = new Player(clients[i].player.Id, clients[i]);
+                if (clients[i].player == null) continue;
+                clients[i].player = new Player(clients[i].player.id, clients[i]);
                 clients[i].player.GetPlayerData();
-                players.Add(clients[i].player.Id, (Player)clients[i].player);
+                players.Add(clients[i].player.id, (Player)clients[i].player);
             }
         }
         public static void Print() {
             foreach (string id in players.Keys) {
-                Console.WriteLine("连接 [" + players[id].conn.GetAdress() + "]");
+                Console.WriteLine(id + ": 连接 [" + players[id].client.GetAdress() + "]");
             }
         }
         public static void SavePlayers() {

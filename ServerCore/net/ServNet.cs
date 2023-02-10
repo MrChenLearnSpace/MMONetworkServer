@@ -166,7 +166,7 @@ namespace ServerCore.net {
                 }
                 Action<IPlayer, ProtocolBase> updateDel = (Action<IPlayer, ProtocolBase>)Delegate.CreateDelegate(typeof(Action<IPlayer, ProtocolBase>), null, mm);
                 updateDel(conn.player, protoBase);
-                Console.WriteLine("[处理玩家消息]" + conn.player.Id + " :" + methodName);
+                Console.WriteLine("[处理玩家消息]" + conn.player.id + " :" + methodName);
             }
         }
 
@@ -186,8 +186,10 @@ namespace ServerCore.net {
                 if (!conn.isUse) continue;
                 if (conn.lastTickTime < timeNow - heartBeatTime) {
                     Console.WriteLine("[心跳引起断开连接]" + conn.GetAdress());
-                    lock (conn)
-                        conn.Close();
+                    lock (conn) {
+                        conn.Close(); 
+                        
+                    }
                 }
             }
         }
@@ -220,7 +222,7 @@ namespace ServerCore.net {
 
                 string str = "连接 [" + clients[i].GetAdress() + "]";
                 if (clients[i].player != null)
-                    str += "玩家id " + clients[i].player.Id;
+                    str += ("玩家id " + clients[i].player.id);
                 Console.WriteLine(str);
             }
         }
