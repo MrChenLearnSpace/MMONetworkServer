@@ -25,7 +25,7 @@ namespace ServerCore {
 
         public bool Register(string id, string pw) {
             FilterDefinition<BsonDocument> filterDefinition = Builders<BsonDocument>.Filter.Eq("id", id);
-            var collection = database.GetCollection<BsonDocument>("account");
+            var collection = database.GetCollection<BsonDocument>("accounts");
 
             if (collection.Find(filterDefinition).ToList().Count> 0) {
                 Console.WriteLine("DataMgr Resister失败,!CanRegister");
@@ -33,7 +33,11 @@ namespace ServerCore {
             }
             BsonDocument file = new BsonDocument {
                 {"_id",id },
-                { "pw", pw }
+                { "pw", pw },
+                { "ip",""},
+                { "banStartTime",0L},
+                { "banEndTime",0L},
+                { "isBanned",false}
             };
             collection.InsertOne(file);
             return true;
@@ -42,7 +46,7 @@ namespace ServerCore {
         public bool CheckPassWord(string id, string pw) {
             FilterDefinition<BsonDocument> filterDefinition = Builders<BsonDocument>.Filter.Where(
                 x =>  x["_id"] == id && x["pw"] == pw);
-            var collection = database.GetCollection<BsonDocument>("account");
+            var collection = database.GetCollection<BsonDocument>("accounts");
             if (collection.Find(filterDefinition).ToList().Count > 0) {
                 return true;
             }

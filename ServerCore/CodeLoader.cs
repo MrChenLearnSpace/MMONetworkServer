@@ -78,6 +78,7 @@ namespace ServerCore {
                 }
 
             }
+           
            // isfishing = true;
             //GC.Collect();
         }
@@ -91,7 +92,6 @@ namespace ServerCore {
                 mm.Invoke(Find(assembly, className), objs);
             else
                 Console.WriteLine("className: " + className + " funName: " + funName + "没找到");
-
         }
 
     }

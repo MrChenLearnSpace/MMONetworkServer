@@ -25,11 +25,13 @@ namespace ServerCore {
                 switch (str) {
                     case "c" :
                         code.Reload(dllName, dllPath);
+                        code.FindFunRun(dllName, dllName + ".LogicManager", "RuntimeDataReflash", new object[] { });
                         break;
 
                     default:
                         string FunStr = "Msg" + str;
                         code.FindFunRun(dllName, dllName + ".LogicManager", FunStr, new object[] { });
+
                         break;
 
 
