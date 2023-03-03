@@ -30,6 +30,7 @@ namespace ServerCore.net {
 
 
         public bool isShowTime;
+        public List<string> displayConsole=new List<string>();
         //心跳时间
         public long heartBeatTime = 800;
 
@@ -138,35 +139,41 @@ namespace ServerCore.net {
         }
 
         private void HandleMsg(Conn conn, ProtocolBase protoBase) {
-
             string methodName = protoBase.GetName();
-            // string methodName = "Msg" + name;
-            //连接协议分发
-            // if (conn.player == null || name == "HeatBeat" || name == "Logout") {
-            if (conn.player == null || methodName == "MsgHeatBeat" || methodName == "MsgLogout") {
-                MethodInfo mm = CodeLoader.GetInstance().Find(HandleDllName, HandleDllName + ".HandleConnMsg").GetType().GetMethod(methodName);
-                if (mm == null) {
-                    string str = "[警告]ConnHandleMsg没有处理连接方法 ";
-                    Console.WriteLine(str + methodName);
-                    return;
-                }
-                Action<Conn, ProtocolBase> updateDel = (Action<Conn, ProtocolBase>)Delegate.CreateDelegate(typeof(Action<Conn, ProtocolBase>), null, mm);
+            try {
+                
+                // string methodName = "Msg" + name;
+                //连接协议分发
+                // if (conn.player == null || name == "HeatBeat" || name == "Logout") {
+                if (conn.player == null || methodName == "MsgHeatBeat" || methodName == "MsgLogout") {
+                    MethodInfo mm = CodeLoader.GetInstance().Find(HandleDllName, HandleDllName + ".HandleConnMsg").GetType().GetMethod(methodName);
+                    if (mm == null) {
+                        string str = "[警告]ConnHandleMsg没有处理连接方法 ";
+                        Console.WriteLine(str + methodName);
+                        return;
+                    }
+                    Action<Conn, ProtocolBase> updateDel = (Action<Conn, ProtocolBase>)Delegate.CreateDelegate(typeof(Action<Conn, ProtocolBase>), null, mm);
 
-                updateDel(conn, protoBase);
-                if (methodName != "MsgHeatBeat")
-                    Console.WriteLine("[处理连接消息]" + conn.GetAdress() + " :" + methodName);
-            }
-            //角色协议分发
-            else {
-                MethodInfo mm = CodeLoader.GetInstance().Find(HandleDllName, HandleDllName + ".HandlePlayerMsg").GetType().GetMethod(methodName);
-                if (mm == null) {
-                    string str = "[警告]PlayerHandleMsg没有处理玩家方法";
-                    Console.WriteLine(str + methodName);
-                    return;
+                    updateDel(conn, protoBase);
+                    if (!displayConsole.Contains(methodName))
+                        Console.WriteLine("[处理连接消息]" + conn.GetAdress() + " :" + methodName);
                 }
-                Action<IPlayer, ProtocolBase> updateDel = (Action<IPlayer, ProtocolBase>)Delegate.CreateDelegate(typeof(Action<IPlayer, ProtocolBase>), null, mm);
-                updateDel(conn.player, protoBase);
-                Console.WriteLine("[处理玩家消息]" + conn.player.id + " :" + methodName);
+                //角色协议分发
+                else {
+                    MethodInfo mm = CodeLoader.GetInstance().Find(HandleDllName, HandleDllName + ".HandlePlayerMsg").GetType().GetMethod(methodName);
+                    if (mm == null) {
+                        string str = "[警告]PlayerHandleMsg没有处理玩家方法";
+                        Console.WriteLine(str + methodName);
+                        return;
+                    }
+                    Action<IPlayer, ProtocolBase> updateDel = (Action<IPlayer, ProtocolBase>)Delegate.CreateDelegate(typeof(Action<IPlayer, ProtocolBase>), null, mm);
+                    updateDel(conn.player, protoBase);
+                    if (!displayConsole.Contains(methodName))
+                        Console.WriteLine("[处理玩家消息]" + conn.player.id + " :" + methodName);
+                }
+            }
+            catch(Exception ex) {
+                Console.WriteLine("[错误] " + methodName + "执行错误 " + ex.ToString());
             }
         }
 

@@ -81,8 +81,10 @@ namespace ServerCore.net {
                 count = writeQueue.Count;
             }
             if (count == 1) {
-                socket.BeginSend(sendBytes, 0, sendBytes.Length,
-                  0, SendCallback, socket);
+                lock (socket) {
+                    socket.BeginSend(sendBytes, 0, sendBytes.Length,
+                      0, SendCallback, socket);
+                }
             }
         }
         public void SendCallback(IAsyncResult ar) {
@@ -112,7 +114,9 @@ namespace ServerCore.net {
             }
             //继续发送
             if (writeQueue.Count > 0) {
-                socket.BeginSend(ba.bytes, ba.readIdx, ba.length, 0, SendCallback, socket);
+                lock (socket) {
+                    socket.BeginSend(ba.bytes, ba.readIdx, ba.length, 0, SendCallback, socket);
+                }
             }
             //正在关闭
             else if (!isUse) {

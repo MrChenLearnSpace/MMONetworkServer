@@ -12,21 +12,28 @@ namespace ServerCore {
             // string dllPath = "F:\\project\\VSProject\\MMONetworkServer\\CSLogicHotfix\\bin\\Debug\\net6.0\\CSLogicHotfix";
             //string dllName = "ServerLoginHotfix";
             //string dllPath = "F:\\project\\VSProject\\ServerLoginHotfix\\bin\\Debug\\net6.0\\ServerLoginHotfix";
-            string dllName = "ChildLogicHotfix";
-            string dllPath = "F:\\project\\VSProject\\ChildLogicHotfix\\bin\\Debug\\net6.0\\ChildLogicHotfix";
+           // string dllName = "ChildLogicHotfix";
+            string dllName = args[0];
+            string dllPath = "F:\\project\\VSProject\\"+ dllName+ "\\bin\\Debug\\net6.0\\"+dllName;
+
 
             CodeLoader code = new CodeLoader();
             code.Reload(dllName,dllPath);
            
             code.FindFunRun(dllName, dllName + ".LogicManager", "Init", new object[] { });
-           
+
             while (true) {
                 string str = Console.ReadLine();
                 switch (str) {
-                    case "c" :
+                    case "c":
+                        code.FindFunRun(dllName, dllName + ".PlayerManager", "SavePlayers", new object[] { });
                         code.Reload(dllName, dllPath);
                         code.FindFunRun(dllName, dllName + ".LogicManager", "RuntimeDataReflash", new object[] { });
                         break;
+                    case "quit":
+                        ServNet.instance.Close();
+                        return ;
+                      
 
                     default:
                         string FunStr = "Msg" + str;
